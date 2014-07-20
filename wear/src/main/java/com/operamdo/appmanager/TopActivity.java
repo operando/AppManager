@@ -1,24 +1,48 @@
 package com.operamdo.appmanager;
 
 import android.app.Activity;
+import android.app.LoaderManager;
+import android.content.Loader;
+import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
-import android.support.wearable.view.WatchViewStub;
-import android.widget.TextView;
+import android.widget.ListView;
 
-public class TopActivity extends Activity {
+import com.operamdo.appmanager.adapter.ApplicationListAdapter;
+import com.operando.appmanager.common.ApplicationListLoader;
 
-    private TextView mTextView;
+import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+public class TopActivity extends Activity implements LoaderManager.LoaderCallbacks<List<ApplicationInfo>> {
+
+    @InjectView(R.id.app_list)
+    ListView mAppList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_top);
-        final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
-        stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
-            @Override
-            public void onLayoutInflated(WatchViewStub stub) {
-                mTextView = (TextView) stub.findViewById(R.id.text);
-            }
-        });
+        setContentView(R.layout.rect_activity_top);
+        ButterKnife.inject(this);
+
+        getLoaderManager().initLoader(0, null, this);
+    }
+
+    @Override
+    public Loader<List<ApplicationInfo>> onCreateLoader(int id, Bundle args) {
+        ApplicationListLoader appLoader = new ApplicationListLoader(this);
+        appLoader.forceLoad();
+
+        return appLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<ApplicationInfo>> loader, List<ApplicationInfo> data) {
+        mAppList.setAdapter(new ApplicationListAdapter(this, data));
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<ApplicationInfo>> loader) {
     }
 }
