@@ -1,4 +1,4 @@
-package com.operamdo.appmanager.adapter;
+package com.operando.appmanager.common.adapter;
 
 
 import android.content.Context;

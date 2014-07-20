@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.operamdo.appmanager.R;
+import com.operando.appmanager.common.adapter.BindableAdapter;
 
 import java.util.List;
 
