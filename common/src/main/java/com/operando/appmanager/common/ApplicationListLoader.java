@@ -5,11 +5,12 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ApplicationListLoader extends AsyncTaskLoader<List<ApplicationInfo>> {
+public class ApplicationListLoader extends AsyncTaskLoader<List<ApplicationItem>> {
 
-    PackageManager mPackageManager;
+    private PackageManager mPackageManager;
 
     public ApplicationListLoader(Context context) {
         super(context);
@@ -17,10 +18,16 @@ public class ApplicationListLoader extends AsyncTaskLoader<List<ApplicationInfo>
     }
 
     @Override
-    public List<ApplicationInfo> loadInBackground() {
-        List<ApplicationInfo> infos = mPackageManager
+    public List<ApplicationItem> loadInBackground() {
+        List<ApplicationInfo> applicationInfoList = mPackageManager
                 .getInstalledApplications(PackageManager.GET_META_DATA);
 
-        return infos;
+        List<ApplicationItem> applicationItemList = new ArrayList<ApplicationItem>();
+
+        for (ApplicationInfo applicationInfo : applicationInfoList) {
+            applicationItemList.add(new ApplicationItem(applicationInfo, mPackageManager));
+        }
+
+        return applicationItemList;
     }
 }
