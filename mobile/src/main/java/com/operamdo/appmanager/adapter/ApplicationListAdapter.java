@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +32,8 @@ public class ApplicationListAdapter extends BindableAdapter<ApplicationItem> {
         }
     }
 
+    private int mLastAnimationPosition;
+
     public ApplicationListAdapter(Context context, List<ApplicationItem> episodeList) {
         super(context, episodeList);
     }
@@ -49,5 +53,12 @@ public class ApplicationListAdapter extends BindableAdapter<ApplicationItem> {
 
         holder.mAppName.setText(item.getAppName());
         holder.mAppIcon.setImageDrawable(item.getAppIcon());
+
+        if (mLastAnimationPosition < position) {
+            Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.motion);
+            view.startAnimation(animation);
+            mLastAnimationPosition = position;
+        }
+
     }
 }
